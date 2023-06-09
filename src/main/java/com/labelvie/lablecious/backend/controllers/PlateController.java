@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@Validated
+@Validated
 @RestController
 @RequestMapping("/api/plates")
 @AllArgsConstructor

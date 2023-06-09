@@ -4,7 +4,7 @@ package com.labelvie.lablecious.backend.services.empl;
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
 import com.labelvie.lablecious.backend.models.dto.CategoryDto;
 import com.labelvie.lablecious.backend.models.entity.Category;
-import com.labelvie.lablecious.backend.repositories.CategoryRepository;
+import com.labelvie.lablecious.backend.repository.CategoryRepository;
 import com.labelvie.lablecious.backend.services.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,4 +47,5 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("The category with id " + id + " does not exist"));
     }
+
 }
