@@ -13,21 +13,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class CategoryDto {
-
     private long id;
 
     @NotBlank(message = "Name is required")
     @Min(value = 3, message = "Name must be at least 3 characters")
     private String name;
 
-    @Min(value = 15, message = "Description must be at least 15 characters")
+    @Min(value = 10, message = "Description must be at least 10 characters")
     private String description;
 
     @Min(value = 0, message = "Price must be greater than 0")
@@ -48,9 +45,9 @@ public class CategoryDto {
                 .collect(Collectors.toList());
     }
 
-
     public Category toCategory() {
         return Category.builder()
+                .id(this.getId())
                 .name(this.getName())
                 .description(this.getDescription())
                 .price(this.getPrice())

@@ -4,6 +4,7 @@ package com.labelvie.lablecious.backend.controllers;
 import com.labelvie.lablecious.backend.models.dto.CategoryDto;
 import com.labelvie.lablecious.backend.services.CategoryService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,14 +14,12 @@ import java.util.List;
 
 @Validated
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getCategories() {
@@ -35,13 +34,13 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> createCategory( @RequestBody CategoryDto categoryDto) {
         CategoryDto createdCategory = categoryService.saveCategory(categoryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable long id, @Valid @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable long id, @RequestBody CategoryDto categoryDto) {
         CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(updatedCategory);
     }
