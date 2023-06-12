@@ -42,6 +42,11 @@ public class MenuPlatesController {
         return ResponseEntity.ok(menuPlatesService.save(menuPlates));
     }
 
+    @PostMapping("/all")
+    public ResponseEntity<List<MenuPlates>> createMenuPlates(@RequestBody List<MenuPlates> menuPlates) {
+        return ResponseEntity.ok(menuPlatesService.saveAll(menuPlates));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MenuPlates> updateMenuPlates(@PathVariable long id, @RequestBody MenuPlates menuPlates) {
         MenuPlates updatedMenuPlates = menuPlatesService.update(id, menuPlates);

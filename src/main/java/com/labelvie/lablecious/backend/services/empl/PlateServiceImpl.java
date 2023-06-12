@@ -52,7 +52,6 @@ public class PlateServiceImpl implements PlateService {
     public List<PlateDto>  getPlatesByCategoryId(long id){
         return PlateDto.fromPlates(plateRepository.findByCategoryId(id));
 
-        //i dont have findAllByCategoryId method in plateRepository -> i have to create it
     }
 
 

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -18,15 +19,12 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class MenuRequest {
-
     @NotBlank(message = "Date is required")
     @Pattern(regexp = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
     private Date date;
 
     @NotBlank(message = "Plates is required")
-    @UniqueElements
-    private MenuPlatesRequest plates;
-
+    private List<MenuPlatesRequest> plates;
 
     @Data
     public static class MenuPlatesRequest {
@@ -38,13 +36,11 @@ public class MenuRequest {
         private int quantity;
     }
 
-
-    public Menu toMenu(){
+    public Menu toMenu() {
         return Menu.builder()
                 .date(this.getDate())
                 .build();
     }
-
 }
 
 

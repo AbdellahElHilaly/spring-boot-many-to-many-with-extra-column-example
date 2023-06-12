@@ -1,8 +1,11 @@
 package com.labelvie.lablecious.backend.repository;
 
+import com.labelvie.lablecious.backend.models.entity.Menu;
 import com.labelvie.lablecious.backend.models.entity.MenuPlates;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MenuPlatesRepository extends JpaRepository<MenuPlates, Long> {
+import java.util.List;
 
+public interface MenuPlatesRepository extends JpaRepository<MenuPlates, Long> {
+    List<MenuPlates> findByMenu(Menu menu);
 }

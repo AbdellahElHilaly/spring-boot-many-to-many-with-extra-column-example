@@ -1,6 +1,7 @@
 package com.labelvie.lablecious.backend.services.empl;
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
+import com.labelvie.lablecious.backend.models.entity.Menu;
 import com.labelvie.lablecious.backend.models.entity.MenuPlates;
 import com.labelvie.lablecious.backend.repository.MenuPlatesRepository;
 import com.labelvie.lablecious.backend.services.MenuPlatesService;
@@ -31,9 +32,19 @@ public class MenuPlatesServiceImpl implements MenuPlatesService {
     }
 
     @Override
+    public List<MenuPlates>  saveAll(List<MenuPlates> menuPlates) {
+        return menuPlatesRepository.saveAll(menuPlates);
+    }
+    @Override
     public void delete(Long id) {
 
     }
+
+    @Override
+    public List<MenuPlates> findByMenu(Menu menu){
+        return menuPlatesRepository.findByMenu(menu);
+    }
+
 
     @Override
     public MenuPlates update(Long id, MenuPlates menuPlates) {

@@ -1,10 +1,12 @@
 package com.labelvie.lablecious.backend.models.entity;
 
+import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 
 @Entity
@@ -29,6 +31,15 @@ public class MenuPlates {
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
     private Menu menu;
+
+
+    public static MenuPlates toMenuPlates(Menu menu, Plate plate, int quantity) {
+        return MenuPlates.builder()
+                .menu(menu)
+                .plate(plate)
+                .quantity(quantity)
+                .build();
+    }
 
 
 }
