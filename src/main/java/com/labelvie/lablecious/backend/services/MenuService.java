@@ -12,8 +12,6 @@ public interface MenuService {
     MenuDto saveMenu(MenuDto menuDto);
     MenuDto updateMenu(long id, MenuDto menuDto);
     void deleteMenu(long id);
-    Menu attachPlate(Menu menu, MenuPlateForm plateForm);
-    Menu attachPlates(Menu menu, List<MenuPlateForm> plateForms);
     Menu findOrFail(long id);
 
 }

@@ -23,8 +23,4 @@ public class Menu {
 
     @Column(nullable = false)
     private Date date;
-
-    @OneToMany(mappedBy = "menu")
-    private List<MenuPlate> plates;
-
 }

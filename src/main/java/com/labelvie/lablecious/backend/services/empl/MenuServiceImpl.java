@@ -3,9 +3,7 @@ package com.labelvie.lablecious.backend.services.empl;
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
 import com.labelvie.lablecious.backend.models.dto.MenuDto;
 import com.labelvie.lablecious.backend.models.entity.Menu;
-import com.labelvie.lablecious.backend.models.entity.MenuPlate;
 import com.labelvie.lablecious.backend.models.entity.Plate;
-import com.labelvie.lablecious.backend.models.form.MenuPlateForm;
 import com.labelvie.lablecious.backend.repository.MenuRepository;
 import com.labelvie.lablecious.backend.services.MenuService;
 import lombok.AllArgsConstructor;
@@ -20,7 +18,7 @@ public class MenuServiceImpl implements MenuService {
 
     private  final MenuRepository menuRepository;
     private final PlateServiceImpl plateService;
-
+    private final MenuPlatesServiceImpl menuPlatesService;
 
     @Override
     public List<MenuDto> getMenus() {
@@ -34,11 +32,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuDto saveMenu(MenuDto menuDto) {
-        Menu menu = menuDto.toMenu();
-        menu = menuRepository.save(menu);
-        menu = attachPlates(menu , menuDto.getPlates());
 
-        return MenuDto.fromMenu(menu);
+        menuDto.getMenuPlates().setMenu(menuRepository.save(menuDto.toMenu()));
+        menuDto.getMenuPlates().setPlate(plateService.findOrFail(menuDto.getMenuPlatesRequest().getPlateId()));
+        menuDto.getMenuPlates().setQuantity(menuDto.getMenuPlatesRequest().getQuantity());
+
+        return menuDto;
+
     }
 
     @Override
@@ -52,25 +52,10 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu attachPlate(Menu menu, MenuPlateForm plateForm) {
-        Plate plate = plateService.findOrFail(plateForm.getId());
-//        menu.getPlates().add(plate);
-        return menu;
-    }
-
-    @Override
-    public Menu attachPlates(Menu menu, List<MenuPlateForm> plateForms) {
-        for (MenuPlateForm plateForm : plateForms) {
-            menu = attachPlate(menu, plateForm);
-        }
-        return menu;
-    }
-
-    @Override
     public Menu findOrFail(long id) {
         return menuRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("The menu with id " + id + " does not exist"));
     }
 
-
 }
+
