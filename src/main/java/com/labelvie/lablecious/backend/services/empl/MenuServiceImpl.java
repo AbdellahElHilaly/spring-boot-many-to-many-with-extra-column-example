@@ -8,6 +8,7 @@ import com.labelvie.lablecious.backend.models.entity.MenuPlates;
 import com.labelvie.lablecious.backend.models.entity.Plate;
 import com.labelvie.lablecious.backend.repository.MenuRepository;
 import com.labelvie.lablecious.backend.services.MenuService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,10 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuResponse getMenuById(long id) {
-        return MenuResponse.fromMenu(this.findOrFail(id));
+        Menu menu = findOrFail(id);
+        List<MenuPlates> menuPlatesList = menuPlatesService.findByMenu(menu);
+        List<MenuResponse.Plates> platesList = MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesList);
+        return MenuResponse.fromMenu(menu, platesList);
     }
 
 
@@ -61,9 +65,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    @Transactional
     public void deleteMenu(long id) {
-
+        Menu menu = findOrFail(id);
+        menuPlatesService.deleteByMenu(menu);
+        menuRepository.delete(menu);
     }
+
 
     @Override
     public Menu findOrFail(long id) {

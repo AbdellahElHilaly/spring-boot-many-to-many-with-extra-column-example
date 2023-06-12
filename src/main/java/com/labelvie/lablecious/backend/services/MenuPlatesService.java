@@ -14,4 +14,5 @@ public interface MenuPlatesService {
     MenuPlates update(Long id, MenuPlates menuPlates);
     MenuPlates findOrFail(Long id);
 
+    void deleteByMenu(Menu menu);
 }

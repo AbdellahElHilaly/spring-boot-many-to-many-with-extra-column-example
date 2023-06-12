@@ -45,6 +45,11 @@ public class MenuPlatesServiceImpl implements MenuPlatesService {
         return menuPlatesRepository.findByMenu(menu);
     }
 
+    @Override
+    public void deleteByMenu(Menu menu) {
+        menuPlatesRepository.deleteByMenu(menu);
+    }
+
 
     @Override
     public MenuPlates update(Long id, MenuPlates menuPlates) {
