@@ -13,4 +13,5 @@ public interface PlateService {
     void deletePlate(long id);
 
     Plate findOrFail(long id);
+    List<PlateDto>  getPlatesByCategoryId(long id);
 }

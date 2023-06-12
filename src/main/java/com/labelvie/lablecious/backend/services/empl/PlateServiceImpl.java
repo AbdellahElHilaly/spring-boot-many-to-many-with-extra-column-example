@@ -49,6 +49,14 @@ public class PlateServiceImpl implements PlateService {
     }
 
     @Override
+    public List<PlateDto>  getPlatesByCategoryId(long id){
+        return PlateDto.fromPlates(plateRepository.findByCategoryId(id));
+
+        //i dont have findAllByCategoryId method in plateRepository -> i have to create it
+    }
+
+
+    @Override
     public Plate findOrFail(long id) {
         return plateRepository.findById(id).orElseThrow(()
                 -> new ResourceNotFoundException("The plate with id " + id + " does not exist"));

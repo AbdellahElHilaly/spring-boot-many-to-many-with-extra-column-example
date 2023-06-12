@@ -1,16 +1,18 @@
 package com.labelvie.lablecious.backend.services;
 
 import java.util.List;
-import com.labelvie.lablecious.backend.models.dto.MenuDto;
+
+import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
+import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
 import com.labelvie.lablecious.backend.models.entity.Menu;
-import com.labelvie.lablecious.backend.models.form.MenuPlateForm;
+
 
 public interface MenuService {
 
-    List<MenuDto> getMenus();
-    MenuDto getMenuById(long id);
-    MenuDto saveMenu(MenuDto menuDto);
-    MenuDto updateMenu(long id, MenuDto menuDto);
+    List<MenuResponse> getMenus();
+    MenuResponse getMenuById(long id);
+    MenuResponse saveMenu(MenuRequest menu);
+    MenuResponse updateMenu(long id, MenuRequest menu);
     void deleteMenu(long id);
     Menu findOrFail(long id);
 

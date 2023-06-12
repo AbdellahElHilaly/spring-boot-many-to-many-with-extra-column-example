@@ -1,7 +1,8 @@
 package com.labelvie.lablecious.backend.controllers;
 
 
-import com.labelvie.lablecious.backend.models.dto.MenuDto;
+import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
+import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
 import com.labelvie.lablecious.backend.services.MenuService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,21 +20,20 @@ public class MenuController {
     private  final MenuService menuService;
 
     @GetMapping
-    public ResponseEntity<List<MenuDto>> getMenus() {
-        List<MenuDto> menus = menuService.getMenus();
+    public ResponseEntity<List<MenuResponse>> getMenus() {
+        List<MenuResponse> menus = menuService.getMenus();
         return ResponseEntity.ok(menus);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuDto> getMenuById(@PathVariable long id) {
-        MenuDto menu = menuService.getMenuById(id);
+    public ResponseEntity<MenuResponse> getMenuById(@PathVariable long id) {
+        MenuResponse menu = menuService.getMenuById(id);
         return ResponseEntity.ok(menu);
     }
 
     @PostMapping
-    public ResponseEntity<MenuDto> createMenu(@RequestBody MenuDto menuDto) {
-        MenuDto createdMenu = menuService.saveMenu(menuDto);
-        return ResponseEntity.ok(createdMenu);
+    public ResponseEntity<MenuResponse> createMenu(@RequestBody MenuRequest menu) {
+        return ResponseEntity.ok(menuService.saveMenu(menu));
     }
 
 
