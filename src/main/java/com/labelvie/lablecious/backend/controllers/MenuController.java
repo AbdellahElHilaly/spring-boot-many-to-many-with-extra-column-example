@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -18,6 +21,7 @@ import java.util.List;
 public class MenuController {
 
     private  final MenuService menuService;
+    private  final  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @GetMapping
     public ResponseEntity<List<MenuResponse>> getMenus() {
@@ -29,6 +33,10 @@ public class MenuController {
     public ResponseEntity<MenuResponse> getMenuById(@PathVariable long id) {
         MenuResponse menu = menuService.getMenuById(id);
         return ResponseEntity.ok(menu);
+    }
+    @GetMapping("/date/{date}")
+    public ResponseEntity<List<MenuResponse>> getMenuByDate(@PathVariable("date") String dateString) throws ParseException {
+         return ResponseEntity.ok(menuService.getMenuByDate(dateFormat.parse(dateString)));
     }
 
     @PostMapping

@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,10 +123,15 @@ public class MenuServiceImpl implements MenuService {
 //        return menuPlatesList;
     }
 
-    private MenuPlates attachMenuPlate2(MenuPlates menuPlates) {
-        return menuPlatesService.save(menuPlates);
+    @Override
+    public List<MenuResponse> getMenuByDate(Date date) {
+        menuList = menuRepository.findByDate(date);
+        return menuList.stream().map(menu -> {
+            menuPlatesList = menuPlatesService.findByMenu(menu);
+            platesList = MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesList);
+            return MenuResponse.fromMenu(menu, platesList);
+        }).collect(Collectors.toList());
     }
-
 
 }
 

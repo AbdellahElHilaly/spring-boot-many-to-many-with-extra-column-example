@@ -1,5 +1,6 @@
 package com.labelvie.lablecious.backend.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
@@ -16,4 +17,5 @@ public interface MenuService {
     void deleteMenu(long id);
     Menu findOrFail(long id);
 
+    List<MenuResponse> getMenuByDate(Date date);
 }

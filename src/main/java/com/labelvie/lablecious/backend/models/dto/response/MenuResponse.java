@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,6 +24,8 @@ public class MenuResponse {
     private long id;
     private Date date;
     private List<Plates> plates;
+
+
 
 
 
@@ -49,8 +54,6 @@ public class MenuResponse {
 
     }
 
-
-
     public static List<MenuResponse> fromMenus(List<Menu> menus) {
         return menus.stream()
                 .map(MenuResponse::fromMenu)
@@ -63,7 +66,6 @@ public class MenuResponse {
                 .date(this.getDate())
                 .build();
     }
-
 
 
     public static MenuResponse fromMenuPlatesList(List<MenuPlates> menuPlatesList) {
@@ -89,7 +91,5 @@ public class MenuResponse {
                         .build())
                 .collect(Collectors.toList());
     }
-
-
 
 }

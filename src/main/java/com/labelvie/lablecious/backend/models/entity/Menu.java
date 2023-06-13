@@ -26,10 +26,4 @@ public class Menu {
     private Date date;
 
 
-    public MenuResponse toResponse() {
-        return MenuResponse.builder()
-                .id(this.getId())
-                .date(this.getDate())
-                .build();
-    }
 }

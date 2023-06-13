@@ -18,6 +18,8 @@ public class PlateServiceImpl implements PlateService {
     private  final PlateRepository plateRepository;
     private final CategoryService categoryService;
 
+    private Plate plate;
+
     @Override
     public List<PlateDto> getPlates() {
         return PlateDto.fromPlates(plateRepository.findAll());
@@ -30,7 +32,7 @@ public class PlateServiceImpl implements PlateService {
 
     @Override
     public PlateDto savePlate(PlateDto plateDto) {
-        Plate plate = plateDto.toPlate();
+        plate = plateDto.toPlate();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
         return PlateDto.fromPlate(plateRepository.save(plate));
     }
@@ -38,7 +40,7 @@ public class PlateServiceImpl implements PlateService {
     @Override
     public PlateDto updatePlate(long id, PlateDto plateDto) {
         plateDto.setId(this.findOrFail(id).getId());
-        Plate plate = plateDto.toPlate();
+        plate = plateDto.toPlate();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
         return PlateDto.fromPlate(plateRepository.save(plate));
     }
