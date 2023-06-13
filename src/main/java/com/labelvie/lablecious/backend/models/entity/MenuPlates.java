@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "menu_plates")
@@ -31,15 +30,5 @@ public class MenuPlates {
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
     private Menu menu;
-
-
-    public static MenuPlates toMenuPlates(Menu menu, Plate plate, int quantity) {
-        return MenuPlates.builder()
-                .menu(menu)
-                .plate(plate)
-                .quantity(quantity)
-                .build();
-    }
-
 
 }

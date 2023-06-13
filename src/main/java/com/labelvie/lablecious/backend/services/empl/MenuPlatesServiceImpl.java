@@ -5,6 +5,7 @@ import com.labelvie.lablecious.backend.models.entity.Menu;
 import com.labelvie.lablecious.backend.models.entity.MenuPlates;
 import com.labelvie.lablecious.backend.repository.MenuPlatesRepository;
 import com.labelvie.lablecious.backend.services.MenuPlatesService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,20 +42,25 @@ public class MenuPlatesServiceImpl implements MenuPlatesService {
     }
 
     @Override
+    public MenuPlates update(Long id, MenuPlates menuPlates) {
+        return null;
+    }
+
+    @Override
     public List<MenuPlates> findByMenu(Menu menu){
         return menuPlatesRepository.findByMenu(menu);
     }
 
+
+
+
     @Override
+    @Transactional
     public void deleteByMenu(Menu menu) {
         menuPlatesRepository.deleteByMenu(menu);
     }
 
 
-    @Override
-    public MenuPlates update(Long id, MenuPlates menuPlates) {
-        return null;
-    }
 
     @Override
     public MenuPlates findOrFail(Long id) {
