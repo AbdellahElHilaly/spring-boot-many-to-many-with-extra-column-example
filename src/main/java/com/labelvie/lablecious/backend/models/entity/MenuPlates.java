@@ -1,5 +1,6 @@
 package com.labelvie.lablecious.backend.models.entity;
 
+import com.labelvie.lablecious.backend.config.AppConfig;
 import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "menu_plates")
 public class MenuPlates {
 
@@ -30,5 +32,6 @@ public class MenuPlates {
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
     private Menu menu;
+
 
 }

@@ -1,7 +1,6 @@
 package com.labelvie.lablecious.backend.services.empl;
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
-import com.labelvie.lablecious.backend.models.dto.CategoryDto;
 import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
 import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
 import com.labelvie.lablecious.backend.models.entity.Menu;
@@ -63,9 +62,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuResponse saveMenu(MenuRequest menuRequest) {
-        menu = menuRepository.save(menuRequest.toMenu());
-        return MenuResponse.fromMenuPlatesList(attachMenuPlatesList(menu, menuRequest));
+        Menu menu = menuRepository.save(menuRequest.toMenu());
+        menuPlatesService.deleteByMenu(menu);
+
+        List<MenuPlates> menuPlatesList = attachMenuPlatesListSave(menu, menuRequest);
+        menuPlatesService.saveAll(menuPlatesList);
+
+        return MenuResponse.fromMenuPlatesList(menuPlatesList);
     }
+
+
+
+
 
     @Override
     public MenuResponse updateMenu(long id, MenuRequest menuRequest) {
@@ -73,7 +81,7 @@ public class MenuServiceImpl implements MenuService {
         menuRequest.setId(this.findOrFail(id).getId());
         MenuResponse.fromMenu(menuRepository.save(menuRequest.toMenu()));
         menuPlatesService.deleteByMenu(menuRequest.toMenu());
-        return MenuResponse.fromMenuPlatesList(attachMenuPlatesList(menuRequest.toMenu(), menuRequest));
+        return MenuResponse.fromMenuPlatesList(attachMenuPlatesListUpdate(menuRequest.toMenu(), menuRequest));
 
     }
 
@@ -98,7 +106,23 @@ public class MenuServiceImpl implements MenuService {
         return menuPlatesService.save(menuPlate);
     }
 
-    private List<MenuPlates> attachMenuPlatesList(Menu menu, MenuRequest menuRequest) {
+
+    private List<MenuPlates> attachMenuPlatesListSave(Menu menu, MenuRequest menuRequest) {
+        return menuRequest.getPlates().stream()
+                .map(platesRequest -> {
+                    MenuPlates menuPlate = MenuPlates.builder()
+                            .menu(menu)
+                            .plate(plateService.findOrFail(platesRequest.getPlateId()))
+                            .quantity(platesRequest.getQuantity())
+                            .build();
+
+                    return attachMenuPlate(menuPlate);
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    private List<MenuPlates> attachMenuPlatesListUpdate(Menu menu, MenuRequest menuRequest) {
 
         return menuRequest.getPlates().stream()
                 .map(platesRequest -> {
