@@ -27,4 +27,8 @@ public class Plate{
     @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
     private Category category;
 
+    @OneToMany(mappedBy = "plate", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
+
+
 }

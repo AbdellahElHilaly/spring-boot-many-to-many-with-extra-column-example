@@ -1,4 +1,4 @@
-package com.labelvie.lablecious.backend.services.empl;
+package com.labelvie.lablecious.backend.services.impl;
 
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;

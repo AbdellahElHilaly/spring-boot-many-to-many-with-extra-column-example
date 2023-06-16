@@ -27,6 +27,9 @@ public class PlateDto {
     private long categoryId;
     CategoryDto category;
 
+    private List<FeedbackDto> feedbacks;
+
+
     public static PlateDto fromPlate(Plate plate) {
         return PlateDto.builder()
                 .id(plate.getId())
@@ -35,6 +38,7 @@ public class PlateDto {
                 .image(plate.getImage())
                 .category(CategoryDto.fromCategory(plate.getCategory()))
                 .categoryId(plate.getCategory().getId())
+                .feedbacks(FeedbackDto.fromFeedbacks(plate.getFeedbacks()))
                 .build();
     }
 

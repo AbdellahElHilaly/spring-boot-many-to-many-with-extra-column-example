@@ -1,4 +1,4 @@
-package com.labelvie.lablecious.backend.services.empl;
+package com.labelvie.lablecious.backend.services.impl;
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
 import com.labelvie.lablecious.backend.models.dto.MenuDto;
@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,13 +73,14 @@ public class MenuServiceImpl implements MenuService {
         menuRequest.setId(findOrFail(id).getId());
 
         menu = menuRepository.save(menuRequest.toMenu());
-        menuPlatesService.deleteByMenu(menu);
         menuPlatesList = MenuPlateDto.toEntityList(MenuPlateDto.fromRequestList(MenuDto.fromEntity(menu),menuRequest.getPlatesList()));
         menuPlatesListSaved.clear();
         menuPlatesListSaved = menuPlatesList.stream().map(menuPlate -> {
             menuPlate.setPlate(plateService.findOrFail(menuPlate.getPlate().getId()));
-            return menuPlatesService.save(menuPlate);
+            return menuPlate;
         }).collect(Collectors.toList());
+        menuPlatesService.deleteByMenu(menu);
+        menuPlatesService.saveAll(menuPlatesListSaved);
 
         return MenuResponse.fromMenu(menu, MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesListSaved));
     }
