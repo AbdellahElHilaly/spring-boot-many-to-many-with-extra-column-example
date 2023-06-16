@@ -36,6 +36,7 @@ public class MenuPlatesServiceImpl implements MenuPlatesService {
     public List<MenuPlates>  saveAll(List<MenuPlates> menuPlates) {
         return menuPlatesRepository.saveAll(menuPlates);
     }
+
     @Override
     public void delete(Long id) {
 

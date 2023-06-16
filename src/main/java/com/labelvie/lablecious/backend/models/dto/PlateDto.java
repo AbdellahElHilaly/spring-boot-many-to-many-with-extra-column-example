@@ -1,7 +1,6 @@
 package com.labelvie.lablecious.backend.models.dto;
 
 
-import com.labelvie.lablecious.backend.models.entity.Category;
 import com.labelvie.lablecious.backend.models.entity.Plate;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -28,8 +27,6 @@ public class PlateDto {
     private long categoryId;
     CategoryDto category;
 
-
-
     public static PlateDto fromPlate(Plate plate) {
         return PlateDto.builder()
                 .id(plate.getId())
@@ -47,7 +44,7 @@ public class PlateDto {
                 .collect(Collectors.toList());
     }
 
-    public Plate toPlate() {
+    public Plate toEntity() {
         return Plate.builder()
                 .id(this.getId())
                 .name(this.getName())

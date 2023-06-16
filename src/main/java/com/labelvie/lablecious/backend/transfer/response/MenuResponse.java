@@ -1,4 +1,4 @@
-package com.labelvie.lablecious.backend.models.dto.response;
+package com.labelvie.lablecious.backend.transfer.response;
 
 import com.labelvie.lablecious.backend.models.entity.Menu;
 import com.labelvie.lablecious.backend.models.entity.MenuPlates;
@@ -12,10 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,11 +20,6 @@ public class MenuResponse {
     private long id;
     private Date date;
     private List<Plates> plates;
-
-
-
-
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -66,7 +57,6 @@ public class MenuResponse {
                 .date(this.getDate())
                 .build();
     }
-
 
     public static MenuResponse fromMenuPlatesList(List<MenuPlates> menuPlatesList) {
         List<Plates> platesList = menuPlatesList.stream()

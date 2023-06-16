@@ -1,11 +1,12 @@
 package com.labelvie.lablecious.backend.services.empl;
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
-import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
-import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
+import com.labelvie.lablecious.backend.models.dto.MenuDto;
+import com.labelvie.lablecious.backend.models.dto.MenuPlateDto;
+import com.labelvie.lablecious.backend.transfer.request.MenuRequest;
+import com.labelvie.lablecious.backend.transfer.response.MenuResponse;
 import com.labelvie.lablecious.backend.models.entity.Menu;
 import com.labelvie.lablecious.backend.models.entity.MenuPlates;
-import com.labelvie.lablecious.backend.models.entity.Plate;
 import com.labelvie.lablecious.backend.repository.MenuRepository;
 import com.labelvie.lablecious.backend.services.MenuService;
 import jakarta.transaction.Transactional;
@@ -27,11 +28,11 @@ public class MenuServiceImpl implements MenuService {
     private final MenuPlatesServiceImpl menuPlatesService;
 
 
-    private List<MenuPlates>  menuPlatesList = new ArrayList<>();
-    private Menu menu = new Menu();
-    private List<Menu> menuList = new ArrayList<>();
-    private List<MenuResponse.Plates> platesList = new ArrayList<>();
-    private MenuPlates menuPlate = new MenuPlates();
+    private List<MenuPlates>  menuPlatesList , menuPlatesListSaved;
+    private Menu menu;
+    private List<Menu> menuList;
+    private List<MenuResponse.Plates> platesList;
+    private MenuPlates menuPlate;
 
 
     @Override
@@ -42,13 +43,6 @@ public class MenuServiceImpl implements MenuService {
             platesList = MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesList);
             return MenuResponse.fromMenu(menu, platesList);
         }).collect(Collectors.toList());
-//        for (Menu menu : menuList) {
-//             menuPlatesList = menuPlatesService.findByMenu(menu);
-//             platesList = MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesList);
-//            menuResponsesList.add(MenuResponse.fromMenu(menu, platesList));
-//        }
-//        return menuResponsesList;
-
     }
 
     @Override
@@ -62,27 +56,33 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuResponse saveMenu(MenuRequest menuRequest) {
-        Menu menu = menuRepository.save(menuRequest.toMenu());
-        menuPlatesService.deleteByMenu(menu);
+        menu = menuRepository.save(menuRequest.toMenu());
+        menuPlatesList = MenuPlateDto.toEntityList(MenuPlateDto.fromRequestList(MenuDto.fromEntity(menu),menuRequest.getPlatesList()));
 
-        List<MenuPlates> menuPlatesList = attachMenuPlatesListSave(menu, menuRequest);
-        menuPlatesService.saveAll(menuPlatesList);
+        menuPlatesListSaved.clear();
 
-        return MenuResponse.fromMenuPlatesList(menuPlatesList);
+        menuPlatesListSaved = menuPlatesList.stream().map(menuPlate -> {
+            menuPlate.setPlate(plateService.findOrFail(menuPlate.getPlate().getId()));
+            return menuPlatesService.save(menuPlate);
+            }).collect(Collectors.toList());
+        return MenuResponse.fromMenu(menu, MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesListSaved));
     }
-
-
-
 
 
     @Override
     public MenuResponse updateMenu(long id, MenuRequest menuRequest) {
+        menuRequest.setId(findOrFail(id).getId());
 
-        menuRequest.setId(this.findOrFail(id).getId());
-        MenuResponse.fromMenu(menuRepository.save(menuRequest.toMenu()));
-        menuPlatesService.deleteByMenu(menuRequest.toMenu());
-        return MenuResponse.fromMenuPlatesList(attachMenuPlatesListUpdate(menuRequest.toMenu(), menuRequest));
+        menu = menuRepository.save(menuRequest.toMenu());
+        menuPlatesService.deleteByMenu(menu);
+        menuPlatesList = MenuPlateDto.toEntityList(MenuPlateDto.fromRequestList(MenuDto.fromEntity(menu),menuRequest.getPlatesList()));
+        menuPlatesListSaved.clear();
+        menuPlatesListSaved = menuPlatesList.stream().map(menuPlate -> {
+            menuPlate.setPlate(plateService.findOrFail(menuPlate.getPlate().getId()));
+            return menuPlatesService.save(menuPlate);
+        }).collect(Collectors.toList());
 
+        return MenuResponse.fromMenu(menu, MenuResponse.fromMenuPlatesListToPlatesList(menuPlatesListSaved));
     }
 
 
@@ -102,50 +102,11 @@ public class MenuServiceImpl implements MenuService {
                 -> new ResourceNotFoundException("The menu with id " + id + " does not exist"));
     }
 
-    private MenuPlates attachMenuPlate(MenuPlates menuPlate) {
-        return menuPlatesService.save(menuPlate);
-    }
 
 
-    private List<MenuPlates> attachMenuPlatesListSave(Menu menu, MenuRequest menuRequest) {
-        return menuRequest.getPlates().stream()
-                .map(platesRequest -> {
-                    MenuPlates menuPlate = MenuPlates.builder()
-                            .menu(menu)
-                            .plate(plateService.findOrFail(platesRequest.getPlateId()))
-                            .quantity(platesRequest.getQuantity())
-                            .build();
-
-                    return attachMenuPlate(menuPlate);
-                })
-                .collect(Collectors.toList());
-    }
 
 
-    private List<MenuPlates> attachMenuPlatesListUpdate(Menu menu, MenuRequest menuRequest) {
 
-        return menuRequest.getPlates().stream()
-                .map(platesRequest -> {
-
-                    menuPlate.setMenu(menu);
-                    menuPlate.setPlate(plateService.findOrFail(platesRequest.getPlateId()));
-                    menuPlate.setQuantity(platesRequest.getQuantity());
-
-                    return attachMenuPlate(menuPlate);
-
-                })
-                .collect(Collectors.toList());
-//        menuPlate.setMenu(menu);
-//        for (MenuRequest.MenuPlatesRequest platesRequest : menuRequest.getPlates()) {
-//
-//            menuPlate.setPlate(plateService.findOrFail(platesRequest.getPlateId()));
-//            menuPlate.setQuantity(platesRequest.getQuantity());
-//
-//            menuPlate = attachMenuPlate(menuPlate);
-//            menuPlatesList.add(menuPlate);
-//        }
-//        return menuPlatesList;
-    }
 
     @Override
     public List<MenuResponse> getMenuByDate(Date date) {

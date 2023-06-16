@@ -32,7 +32,7 @@ public class PlateServiceImpl implements PlateService {
 
     @Override
     public PlateDto savePlate(PlateDto plateDto) {
-        plate = plateDto.toPlate();
+        plate = plateDto.toEntity();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
         return PlateDto.fromPlate(plateRepository.save(plate));
     }
@@ -40,7 +40,7 @@ public class PlateServiceImpl implements PlateService {
     @Override
     public PlateDto updatePlate(long id, PlateDto plateDto) {
         plateDto.setId(this.findOrFail(id).getId());
-        plate = plateDto.toPlate();
+        plate = plateDto.toEntity();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
         return PlateDto.fromPlate(plateRepository.save(plate));
     }

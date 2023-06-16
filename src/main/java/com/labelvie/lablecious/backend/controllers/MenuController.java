@@ -1,8 +1,9 @@
 package com.labelvie.lablecious.backend.controllers;
 
 
-import com.labelvie.lablecious.backend.models.dto.request.MenuRequest;
-import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
+import com.labelvie.lablecious.backend.models.entity.MenuPlates;
+import com.labelvie.lablecious.backend.transfer.request.MenuRequest;
+import com.labelvie.lablecious.backend.transfer.response.MenuResponse;
 import com.labelvie.lablecious.backend.services.MenuService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Validated

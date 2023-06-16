@@ -1,6 +1,5 @@
 package com.labelvie.lablecious.backend.models.entity;
 
-import com.labelvie.lablecious.backend.models.dto.response.MenuResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,6 +22,5 @@ public class Menu {
 
     @Column(nullable = false)
     private Date date;
-
 
 }
