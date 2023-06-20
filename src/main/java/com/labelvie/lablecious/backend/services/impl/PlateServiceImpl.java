@@ -2,6 +2,7 @@ package com.labelvie.lablecious.backend.services.impl;
 
 import com.labelvie.lablecious.backend.exceptions.handler.ResourceNotFoundException;
 import com.labelvie.lablecious.backend.models.dto.PlateDto;
+import com.labelvie.lablecious.backend.models.entity.Feedback;
 import com.labelvie.lablecious.backend.models.entity.Plate;
 import com.labelvie.lablecious.backend.repository.PlateRepository;
 import com.labelvie.lablecious.backend.services.CategoryService;
@@ -9,6 +10,7 @@ import com.labelvie.lablecious.backend.services.PlateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class PlateServiceImpl implements PlateService {
     private final CategoryService categoryService;
 
     private Plate plate;
+    private final List<Feedback> feedbackList = new ArrayList<>();
 
     @Override
     public List<PlateDto> getPlates() {
@@ -34,6 +37,7 @@ public class PlateServiceImpl implements PlateService {
     public PlateDto savePlate(PlateDto plateDto) {
         plate = plateDto.toEntity();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
+        plate.setFeedbacks(feedbackList);
         return PlateDto.fromPlate(plateRepository.save(plate));
     }
 
@@ -42,6 +46,7 @@ public class PlateServiceImpl implements PlateService {
         plateDto.setId(this.findOrFail(id).getId());
         plate = plateDto.toEntity();
         plate.setCategory(categoryService.findOrFail(plateDto.getCategoryId()));
+        if(plate.getFeedbacks()==null) plate.setFeedbacks(feedbackList);
         return PlateDto.fromPlate(plateRepository.save(plate));
     }
 
